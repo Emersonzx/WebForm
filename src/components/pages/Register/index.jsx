@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 import { Link } from "react-router-dom";
 import { auth } from "../../../services/firebaseConfig";
 
@@ -8,44 +10,27 @@ import { auth } from "../../../services/firebaseConfig";
 export function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(true);
-  const [passwordError, setPasswordError] = useState(true);
-
-  const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
+ 
+  
+  
 
   async function handleCreateUser(e) {
-    e.preventDefault();
-
-    if (!email) {
-      setEmailError('O e-mail não foi preenchido');
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
-      setEmailError('E-mail inválido');
-    } else {
-      setEmailError(false);
-    }
-  
-    if (!password) {
-      setPasswordError('A senha não foi preenchida');
-    } else if (password.length < 6) {
-      setPasswordError('A senha deve possuir no mínimo 6 caracteres');
-    } else {
-      setPasswordError(false);
-    }
-    
-    if (!emailError && !passwordError) {
       try {
-        await createUserWithEmailAndPassword(email, password);
-        alert("cadastro realizado com sucesso");
+        const user = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        console.log(user);
       } catch (error) {
-        console.error(error);
+        console.log(error.message);
+        alert("Email e/ou senha inválidos")
       }
-    }
-  }
+    };
 
   return (
     <div className="container">
       <header className="header">
-      <h2>SpaceforStuff</h2>
         <span>Digite suas informações de cadastro</span>
       </header>
 
@@ -60,7 +45,7 @@ export function SignUp() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="error">{emailError && <p>{emailError}</p>}</div>
+       
 
         <div className="inputContainer">
           <label htmlFor="password">Senha</label>
@@ -72,7 +57,7 @@ export function SignUp() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div className="error">{passwordError && <p>{passwordError}</p>}</div>
+       
 
         <button onClick={handleCreateUser} className="button">
           Cadastrar
