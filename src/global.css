@@ -129,14 +129,22 @@ html, body {
  text-decoration-line: underline;
  color: #fefeff;
 }
-.error{
- color: rgb(255, 255, 255);
- margin-bottom: 20px;
-}
 
 .logout{
  margin-top: 20px;
  color: rgb(0, 0, 0);
  background-color: #ffffff;
  padding: 10px;
+}
+
+@media (max-width: 600px) {
+ 
+  .container form .inputContainer input {
+    width: 100%;
+    padding-right: 100px;
+  }
+  .container form .button {
+    width: 100%;
+    
+  }
 }
